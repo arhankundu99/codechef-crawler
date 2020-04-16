@@ -1,0 +1,318 @@
+/*
+Author : Kritagya Agarwal
+April Long Challenge
+REBIT
+*/
+
+#include<bits/stdc++.h>
+#define ll long long int
+#define MAX 5005
+#define M 998244353
+#define ld long long int
+using namespace std;
+
+struct node
+{
+	char number;
+	ll sum;
+	node * left;
+	node * right;
+	ll dp[4];
+};
+
+node * newNode(char u)
+{
+	node * temp = new node();
+	temp->left = NULL;
+	temp->right = NULL;
+	temp->dp[0] = temp->dp[1] = temp->dp[2] = temp->dp[3] = 1;
+	temp->sum = 4;
+	temp->number = u;
+	return temp;
+}
+
+ll poe(ll a, ll n)
+{
+	if(n == 0) return 1;
+
+	ll ans = 1;
+	ll vl = a;
+
+	while(n)
+	{
+	    if(n%2)
+	    {
+	        ans *= vl;
+	        ans %= M;
+	    }
+
+	    vl *= vl;
+	    vl %= M;
+	    n /= 2;
+	}
+
+	return ans;
+}
+
+node * constructTree(string s)
+{
+	stack<node *> st;
+	node * t, *t1, *t2;
+
+	for(int i = 0 ; i < s.size() ; i++)
+	{
+	    if(s[i] == '#')
+	    {
+	        t = newNode(s[i]);
+	        st.push(t);
+	    }  
+
+	    else
+	    {
+	        t = newNode(s[i]);
+
+	        t1 = st.top();
+	        st.pop();
+	        t2 = st.top();
+	        st.pop();
+
+	        t->right = t1;
+	        t->left = t2;
+
+	        st.push(t);
+	    }
+	}
+
+	t = st.top();
+	st.pop();
+
+	return t;
+}
+
+ 
+int prec(char c) 
+{ 
+	if(c == '^') 
+	return 1; 
+	else if(c == '&') 
+	return 3; 
+	else if(c == '|') 
+	return 2; 
+	else
+	return -1; 
+} 
+  
+string infixToPostfix(string s) 
+{ 
+	std::stack<char> st; 
+	st.push('N'); 
+	int l = s.length(); 
+	string ns; 
+	for(int i = 0; i < l; i++) 
+	{ 
+	    // If the scanned character is an operand, add it to output string. 
+	    if(s[i] == '#') 
+	    ns += s[i]; 
+  
+	    // If the scanned character is an ‘(‘, push it to the stack. 
+	    else if(s[i] == '(') 
+	      
+	    st.push('('); 
+	      
+	    // If the scanned character is an ‘)’, pop and to output string from the stack 
+	    // until an ‘(‘ is encountered. 
+	    else if(s[i] == ')') 
+	    { 
+	        while(st.top() != 'N' && st.top() != '(') 
+	        { 
+	            char c = st.top(); 
+	            st.pop(); 
+	           ns += c; 
+	        } 
+	        if(st.top() == '(') 
+	        { 
+	            char c = st.top(); 
+	            st.pop(); 
+	        } 
+	    } 
+	      
+	    //If an operator is scanned 
+	    else{ 
+	        while(st.top() != 'N' && prec(s[i]) <= prec(st.top())) 
+	        { 
+	            char c = st.top(); 
+	            st.pop(); 
+	            ns += c; 
+	        } 
+	        st.push(s[i]); 
+	    } 
+	} 
+	//Pop all the remaining elements from the stack 
+	while(st.top() != 'N') 
+	{ 
+	    char c = st.top(); 
+	    st.pop(); 
+	    ns += c; 
+	} 
+	  
+	return ns;
+  
+} 
+
+void process(node * root)
+{
+	if(root->left == NULL && root->right == NULL)
+	{
+	    return;
+	}
+	
+	process(root->left);
+	process(root->right);
+	char op = root->number;
+
+	if(op == '&')
+	{
+	    root->dp[0] = ((root->left->dp[0])*(root->right->sum))%M
+	    + ((root->left->sum)*(root->right->dp[0]))%M +
+	    ((root->left->dp[2])*(root->right->dp[3]))%M +
+	    ((root->left->dp[3])*(root->right->dp[2]))%M -
+	    ((root->left->dp[0])*(root->right->dp[0]))%M + M ;
+	    root->dp[0] %= M;
+
+	    root->dp[1] = ((root->left->dp[1])*(root->right->dp[1]))%M;
+	    root->dp[1] %= M;
+
+	    root->dp[2] = ((root->left->dp[2])*(root->right->dp[2]))%M
+	    + ((root->left->dp[2])*(root->right->dp[1]))%M +
+	    ((root->left->dp[1])*(root->right->dp[2]))%M ;
+	    root->dp[2] %= M;
+
+	    root->dp[3] = ((root->left->dp[3])*(root->right->dp[3]))%M
+	    + ((root->left->dp[3])*(root->right->dp[1]))%M +
+	    ((root->left->dp[1])*(root->right->dp[3]))%M;
+	    root->dp[3] %= M;
+	}
+	else if( op == '|')
+	{
+	    root->dp[0] = ((root->left->dp[0])*(root->right->dp[0]))%M;
+	    root->dp[0] %= M;
+
+	    root->dp[1] = ((root->left->sum)*(root->right->dp[1]))%M 
+	    + ((root->left->dp[1])*(root->right->sum))%M + 
+	    ((root->left->dp[2])*(root->right->dp[3]))%M +
+	    ((root->left->dp[3])*(root->right->dp[2]))%M -
+	    ((root->left->dp[1])*(root->right->dp[1]))%M + M;
+	    root->dp[1] %= M;
+
+	    root->dp[2] = ((root->left->dp[2])*(root->right->dp[2]))%M
+	    + ((root->left->dp[2])*(root->right->dp[0]))%M +
+	    ((root->left->dp[0])*(root->right->dp[2]))%M;
+	    root->dp[2] %= M;
+
+	    root->dp[3] = ((root->left->dp[3])*(root->right->dp[3]))%M
+	    + ((root->left->dp[3])*(root->right->dp[0]))%M +
+	    ((root->left->dp[0])*(root->right->dp[3]))%M;
+	    root->dp[3] %= M;          
+	}
+	else if( op == '^')
+	{
+	    root->dp[0] = ((root->left->dp[0])*(root->right->dp[0]))%M
+	    + ((root->left->dp[1])*(root->right->dp[1]))%M +
+	    ((root->left->dp[2])*(root->right->dp[2]))%M +
+	    ((root->left->dp[3])*(root->right->dp[3]))%M; 
+	    root->dp[0] %= M;
+
+	    root->dp[1] = ((root->left->dp[1])*(root->right->dp[0]))%M
+	    + ((root->left->dp[0])*(root->right->dp[1]))%M +
+	    ((root->left->dp[2])*(root->right->dp[3]))%M +
+	    ((root->left->dp[3])*(root->right->dp[2]))%M ;
+	    root->dp[1] %= M;
+
+	    root->dp[2] = ((root->left->dp[1])*(root->right->dp[3]))%M
+	    + ((root->left->dp[3])*(root->right->dp[1]))%M + 
+	    ((root->left->dp[2])*(root->right->dp[0]))%M +
+	    ((root->left->dp[0])*(root->right->dp[2]))%M ;
+	    root->dp[2] %= M;
+
+	    root->dp[3] = ((root->left->dp[1])*(root->right->dp[2]))%M
+	    + ((root->left->dp[2])*(root->right->dp[1]))%M + 
+	    ((root->left->dp[3])*(root->right->dp[0]))%M +
+	    ((root->left->dp[0])*(root->right->dp[3]))%M ;
+	    root->dp[3] %= M;
+	}
+
+	root->sum = root->dp[0] + root->dp[1] + root->dp[2] + root->dp[3];
+	root->sum %= M;
+}
+
+int main()
+{
+	int t;
+	cin>>t;
+
+	for(int k = 1 ; k <= t ; k++)
+	{
+	    string s;
+	    cin>>s;
+	    string post = infixToPostfix(s);
+	    int length = s.size();
+	    
+	 
+	    int ans = 0;
+	    char an;
+	    ll sum = 0;
+	    if(length == 1)
+	    {
+	        ld f0 = 1;
+	        ld f1 = 1;
+	        ld f2 = 1;
+	        ld f3 = 1;
+	        
+	        ld fn = f0 + f1 + f2 + f3;
+	        fn %= M;
+
+	        f0 *= poe(fn,M-2);
+	        f0 %= M;
+
+	        f1 *= poe(fn,M-2);
+	        f1 %= M;
+
+	        f2 *= poe(fn,M-2);
+	        f2 %= M;
+
+	        f3 *= poe(fn,M-2);
+	        f3 %= M;
+
+	    
+	        cout<<f0<<" "<<f1<<" "<<f2<<" "<<f3<<endl;
+
+	    }
+	    else
+	    {
+	        node * root = constructTree(post);
+	        process(root);
+	        
+	        ld f0 = root->dp[0];
+	        ld f1 = root->dp[1];
+	        ld f2 = root->dp[2];
+	        ld f3 = root->dp[3];
+	        
+	        ld fn = f0 + f1 + f2 + f3;
+	        fn %= M;
+
+	        f0 *= poe(fn,M-2);
+	        f0 %= M;
+
+	        f1 *= poe(fn,M-2);
+	        f1 %= M;
+
+	        f2 *= poe(fn,M-2);
+	        f2 %= M;
+
+	        f3 *= poe(fn,M-2);
+	        f3 %= M;
+
+	        cout<<f0<<" "<<f1<<" "<<f2<<" "<<f3<<endl;
+	    }
+	}
+}
