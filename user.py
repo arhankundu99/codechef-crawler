@@ -6,25 +6,29 @@ import os
 
 
 def download(problem_code, link):
+    file = problem_code + ".txt"
+    parent_path = "SOLUTIONS"
+    final_path = os.path.join(parent_path, file)
+
+    if os.path.exists(final_path):
+        print("This file is already downloaded")
+        return
+
     r = requests.get(link)
-    extra = str(BeautifulSoup(r.text, 'html.parser').find('a', string="View")['href'])
-    view_solution_link = "https://www.codechef.com" + extra
+    link = BeautifulSoup(r.text, 'html.parser').find('a', string="View")['href']
+    view_solution_link = "https://www.codechef.com" + link
     view_plane_text_link = view_solution_link.replace("viewsolution", "viewplaintext")
 
     r = requests.get(view_plane_text_link, headers=headers)
     code = BeautifulSoup(r.content, "html.parser").find("pre").text
-    file = problem_code+".txt"
+
     with open(file, "w") as f:
         for line in code:
             f.write(line)
 
-    parent_path = "SOLUTIONS"
     if not os.path.exists(parent_path):
         os.mkdir(parent_path)
-
-    final_path = os.path.join(parent_path, file)
-    if not os.path.exists(final_path):
-        os.rename(file, final_path)
+    os.rename(file, final_path)
 
 
 class User:
@@ -59,7 +63,7 @@ class User:
             print("Something went wrong!")
 
     def get_code(self, problem_code):
-        info = self.soup.find('a', string=problem_code)
+        info = self.soup.find('a', text=problem_code)
         if info:
             link = 'https://www.codechef.com'+info['href']
             download(problem_code, link)
