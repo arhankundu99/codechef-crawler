@@ -21,7 +21,7 @@ crawler.get_schedule():
 # returns future contests
 
 crawer.get_editorial(contest_code, problem_code)
-# returns the file which has the editorial for the given problem
+# downloads editorial for the given problem
 ```
 ### Get user specific details
 ```python
