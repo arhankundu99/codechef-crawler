@@ -17,7 +17,7 @@ You can easily install all requirements by just using the following command- \
 ```python
 import crawler
 
-crawler.get_schedule(): 
+crawler.get_schedule()
 # returns future contests
 
 crawer.get_editorial(contest_code, problem_code)
