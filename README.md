@@ -38,3 +38,6 @@ user.get_profile()
 
 user.has_solved(problem_code)
 # returns true if the user has solved the problem
+
+user.get_codes(contest_name)
+# Download codes of the user contest-wise
