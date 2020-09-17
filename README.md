@@ -46,11 +46,13 @@ user.has_solved(problem_code)
 
 
 ### Get editorials and schedule of future contests
+
 ```python
 import crawler
 crawler.get_schedule()
 # returns future contests
 ```
+
 <img src="images/schedule.PNG">
 
 ```python
