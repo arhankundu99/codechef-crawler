@@ -31,7 +31,7 @@ user.download_all_codes(contest_name)
 user.get_ratings()
 # returns the ratings of long challenges, lunchtimes and cook-off challenges of the user
 ```
-<<img src="images/ratings.PNG">
+<img src="images/ratings.PNG">
 
 ```python
 user.get_profile()
