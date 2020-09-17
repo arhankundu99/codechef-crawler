@@ -1,0 +1,67 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		Scanner scan=new Scanner(System.in);
+		int t=scan.nextInt();
+		while(t-->0)
+		{
+		    int n=scan.nextInt();
+		    int p=scan.nextInt();
+		    int[]d=new int[n];
+		    int ele=0;
+		    int idx=-1;
+		    for(int i=0;i<n;i++)
+		    {
+		        d[i]=scan.nextInt();
+		        if(p%d[i]!=0)
+		        {
+		            ele=d[i];
+		            idx=i;
+		        }
+		    }
+		    if(ele!=0)
+		    {
+		        System.out.print("YES ");
+		        for(int i=0;i<idx;i++)System.out.print("0 ");
+		        System.out.print(((p/ele)+1)+" ");
+		        for(int i=idx+1;i<n;i++)System.out.print("0 ");
+		        System.out.println("");
+		        continue;
+		    }
+		    int[]count=new int[d.length];
+		    if(isNo(d))System.out.println("NO");
+		    else
+		    {
+		        System.out.print("YES ");
+		        for(int i=1;i<n;i++)
+		        {
+		            if(d[i]%d[i-1]!=0)
+		            {
+		                count[i]=(p/d[i])-1;
+		                count[i-1]=((p-(((p/d[i])-1)*d[i]))/d[i-1])+1;
+		                break;
+		            }
+		        }
+		        for(int i=0;i<n;i++)System.out.print(count[i]+" ");
+		        System.out.println("");
+		    }
+		}
+	}
+	public static boolean isNo(int[]d)
+	{
+	    for(int i=1;i<d.length;i++)
+	    {
+	        if(d[i]%d[i-1]!=0)return false;
+	    }
+	    return true;
+	}
+
+}

@@ -1,0 +1,46 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		Scanner scan = new Scanner(System.in);
+		int t = scan.nextInt();
+		while(t-->0)
+		{
+		    int a = scan.nextInt();
+		    int b = scan.nextInt();
+		    
+		    int sum = a+b;
+		    
+		    char[]c1 = String.valueOf(a).toCharArray();
+		    char[]c2 = String.valueOf(b).toCharArray();
+		    
+		    for(int i=0;i<c1.length;i++)
+		    {
+		        for(int j=0;j<c2.length;j++)
+		        {
+		            swap(c1,c2,i,j);
+		            
+		            int a1 = Integer.valueOf(String.valueOf(c1));
+		            int b1 = Integer.valueOf(String.valueOf(c2));
+		            
+		            sum = Math.max(sum,a1+b1);
+		            swap(c1,c2,i,j);
+		        }
+		    }
+		    System.out.println(sum);
+		}
+	}
+	public static void swap(char[]c1, char[]c2, int i, int j)
+	{
+	    char temp = c1[i];
+	    c1[i] = c2[j];
+	    c2[j] = temp;
+	}
+}

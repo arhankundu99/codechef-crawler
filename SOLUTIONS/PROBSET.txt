@@ -1,0 +1,49 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		Scanner scan = new Scanner(System.in);
+		int t = scan.nextInt();
+		while(t-->0)
+		{
+		    int n = scan.nextInt();
+		    int m = scan.nextInt();
+		    boolean invalid = false,weak = false;
+		    for(int j=0;j<n;j++)
+		    {
+		        int oneCount = 0;
+		        
+		        String a = scan.next();
+		        String b = scan.next();
+		    
+    		    if(a.equals("correct"))
+    		    {
+    		        for(int i=0;i<b.length();i++)
+    		        {
+    		            if(b.charAt(i)=='0')
+    		            {
+    		                invalid = true;
+    	                    break;
+    		            }
+    		        }
+    		    }
+    		    if(a.equals("wrong"))
+    		    {
+    		        for(int i=0;i<b.length();i++)
+    		            if(b.charAt(i)=='1')oneCount++;
+    		        if(oneCount == b.length())weak = true;
+    		    }
+		    }
+		    if(invalid)System.out.println("INVALID");
+		    else if(weak)System.out.println("WEAK");
+		    else System.out.println("FINE");
+		}
+	}
+}

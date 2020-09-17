@@ -1,0 +1,48 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		Scanner scan=new Scanner(System.in);
+		int t=scan.nextInt();
+		while(t-->0)
+		{
+		    int n=scan.nextInt();
+		    double totalTax=0;
+		    if(n>250000&&n<=500000)
+		    {
+		        totalTax=((0.05D)*(n-250000));
+		    }
+		    if(n>500000&&n<=750000)
+		    {
+		        totalTax=((0.05D)*(500000-250000))+((n-500000)*0.1D);
+		    }
+		    if(n>750000&&n<=1000000)
+		    {
+		        totalTax=((0.05D)*(500000-250000))+((750000-500000)*0.1D)+((n-750000)*0.15D);
+		    }
+		    
+		    if(n>1000000&&n<=1250000)
+		    {
+		        totalTax=((0.05D)*(500000-250000))+((750000-500000)*0.1D)+((1000000-750000)*0.15D)+((n-1000000)*0.2D);
+		        
+		    }
+		    if(n>1250000&&n<=1500000)
+		    {
+		        totalTax=((0.05D)*(500000-250000))+((750000-500000)*0.1D)+((1000000-750000)*0.15D)+((1250000-1000000)*0.2D)+((n-1250000)*0.25D);
+		    }
+		    if(n>1500000)
+		    {
+		        totalTax=((0.05D)*(500000-250000))+((750000-500000)*0.1D)+((1000000-750000)*0.15D)+((1250000-1000000)*0.2D)+((1500000-1250000)*0.25D)+((n-1500000)*0.3D);
+		    }
+		    System.out.println(n-(int)totalTax);
+		        
+		}
+	}
+}

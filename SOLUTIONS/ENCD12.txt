@@ -1,0 +1,219 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Scan
+{
+    private byte[] buf=new byte[1024];
+    private int index;
+    private InputStream in;
+    private int total;
+    public Scan()
+    {
+        in=System.in;
+    }
+    public int scan()throws IOException
+    {
+        if(total<0)
+        throw new InputMismatchException();
+        if(index>=total)
+        {
+            index=0;
+            total=in.read(buf);
+            if(total<=0)
+            return -1;
+        }
+        return buf[index++];
+    }
+    public int scanInt()throws IOException
+    {
+        int integer=0;
+        int n=scan();
+        while(isWhiteSpace(n))
+        n=scan();
+        int neg=1;
+        if(n=='-')
+        {
+            neg=-1;
+            n=scan();
+        }
+        while(!isWhiteSpace(n))
+        {
+            if(n>='0'&&n<='9')
+            {
+                integer*=10;
+                integer+=n-'0';
+                n=scan();
+            }
+            else throw new InputMismatchException();
+        }
+        return neg*integer;
+    }
+    public double scanDouble()throws IOException
+    {
+        double doub=0;
+        int n=scan();
+        while(isWhiteSpace(n))
+        n=scan();
+        int neg=1;
+        if(n=='-')
+        {
+            neg=-1;
+            n=scan();
+        }
+        while(!isWhiteSpace(n)&&n!='.')
+        {
+            if(n>='0'&&n<='9')
+            {
+                doub*=10;
+                doub+=n-'0';
+                n=scan();
+            }
+            else throw new InputMismatchException();
+        }
+        if(n=='.')
+        {
+            n=scan();
+            double temp=1;
+            while(!isWhiteSpace(n))
+            {
+                if(n>='0'&&n<='9')
+                {
+                    temp/=10;
+                    doub+=(n-'0')*temp;
+                    n=scan();
+                }
+                else throw new InputMismatchException();
+            }
+        }
+        return doub*neg;
+    }
+    public String scanString()throws IOException
+    {
+        StringBuilder sb=new StringBuilder();
+        int n=scan();
+        while(isWhiteSpace(n))
+        n=scan();
+        while(!isWhiteSpace(n))
+        {
+            sb.append((char)n);
+            n=scan();
+        }
+        return sb.toString();
+    }
+    private boolean isWhiteSpace(int n)
+    {
+        if(n==' '||n=='\n'||n=='\r'||n=='\t'||n==-1)
+        return true;
+        return false;
+    }
+}
+class Print
+{
+    private final BufferedWriter bw;
+    public Print()
+    {
+        this.bw=new BufferedWriter(new OutputStreamWriter(System.out));
+    }
+    public void print(Object object)throws IOException
+    {
+        bw.append(""+object);
+    }
+    public void println(Object object)throws IOException
+    {
+        print(object);
+        bw.append("\n");
+    }
+    public void close()throws IOException
+    {
+        bw.close();
+    }
+}
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		Scanner scan = new Scanner(System.in);
+		while(scan.hasNext()){
+		    String s = scan.next();
+		    if(s.equals("0"))break;
+		    int ans = solve(s);
+		    if(ans == -1)System.out.println("Impossible");
+		    else System.out.println(ans);
+		}
+	}
+	public static int solve(String s){
+	    
+	    int count = 0; // minimum adjacent swaps
+	    
+	    StringBuilder sb = new StringBuilder();
+	    sb.append(s);
+	    
+	    int dist = Integer.MAX_VALUE; //minimum distance of character with odd length from the middle
+	    char oddC = '0'; // character which has odd length
+	    
+	    if(sb.length() % 2 != 0){
+	        
+	        //there should be only one charater which odd length
+	        int[] freq = new int[26];
+	        for(int i = 0; i < sb.length(); i++)freq[sb.charAt(i)-97]++;
+	        
+	        int oddCount = 0;
+	        
+	        for(int i = 0; i < 26; i++){
+	            if(freq[i] % 2 != 0){
+	                oddCount++;
+	                oddC = (char)(i+97);
+	            }
+	        }
+	        if(oddCount > 1)return -1;
+	        
+	        
+	        for(int i = 0; i < sb.length(); i++){
+	            if(sb.charAt(i) == oddC){
+	                if(dist > Math.abs(sb.length()/2 - i)){
+	                    dist = Math.abs(sb.length()/2 - i);
+	                }
+	            }
+	        }
+	        for(int i = 0; i < sb.length(); i++){
+	            if(sb.charAt(i) == oddC){
+	                sb.deleteCharAt(i);
+	                break;
+	            }
+	        }
+	    }
+	    if(dist == Integer.MAX_VALUE)dist = 0; //means the given string is of even length
+	    char[] c = sb.toString().toCharArray();
+	    
+	    for(int i = 0; i < c.length/2; i++){
+	        int left = i;
+	        int right = c.length - i - 1;
+	        
+	        while(left <= right){
+	            if(c[left] == c[right])break;
+	            right--;
+	        }
+	        if(left == right)return -1;
+	        
+	        for(int j = right; j < c.length - i - 1; j++){
+	            char temp = c[j];
+	            c[j] = c[j+1];
+	            c[j+1] = temp;
+	            
+	            count++;
+	        }
+	    }
+	    
+	    
+	    sb = new StringBuilder();
+	    sb.append(String.valueOf(c));
+	    if(s.length() % 2 != 0)sb.insert(s.length()/2, oddC); //insert the character which has odd length
+	    //System.out.println(sb);
+	    
+	    count += dist;
+	    return count;
+	}
+}

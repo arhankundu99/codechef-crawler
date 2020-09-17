@@ -1,0 +1,52 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		Scanner scan=new Scanner(System.in);
+		int t=scan.nextInt();
+		while(t-->0)
+		{
+		    int n=scan.nextInt();
+		    int[]a=new int[n];
+		    int[]b=new int[n];
+		    for(int i=0;i<n;i++)a[i]=scan.nextInt();
+		    for(int i=0;i<n;i++)b[i]=scan.nextInt();
+		    
+		    int x=0;
+		    for(int i=0;i<n;i++)x^=a[i]^b[i];
+		    Map<Integer,Integer>map=new HashMap<>();
+		    for(int i=0;i<n;i++)
+		    {
+		        if(map.containsKey(b[i]))map.put(b[i],map.get(b[i])+1);
+		        else map.put(b[i],1);
+		    }
+		    int[]ret=new int[n];
+		    int idx=0;
+		    boolean found=true;
+		    for(int i=0;i<n;i++)
+		    {
+		        if(!map.containsKey(x^a[i]))
+		        {
+		            System.out.println(-1);
+		            found=false;
+		            break;
+		        }
+		        if(map.get(x^a[i])==1)map.remove(x^a[i]);
+		        else map.put(x^a[i],map.get(x^a[i])-1);
+		        ret[idx++]=x^a[i];
+		    }
+		    if(found)
+		    {
+		        for(int i=0;i<n;i++)System.out.print(ret[i]+" ");
+		        System.out.println("");
+		    }
+		}
+	}
+}

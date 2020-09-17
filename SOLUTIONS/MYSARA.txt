@@ -1,0 +1,58 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Codechef
+{
+    static long M = 1000000007L;
+	public static void main (String[] args) throws java.lang.Exception
+	{
+	    Scanner scan = new Scanner(System.in);
+	    int t = scan.nextInt();
+	    while(t-->0)
+	    {
+	        int n = scan.nextInt();
+	        int[]b = new int[n];
+	        for(int i=0;i<n;i++)b[i] = scan.nextInt();
+	        
+	        long ans=1L;
+	        for(int i=1;i<n;i++)
+	        {
+	            long x=f(b[i], b[i-1]);
+	            if(x==0)
+	            {
+	                ans=0;
+	                break;
+	            }
+	            ans=(ans*x)%M;
+	        }
+	        System.out.println(ans);
+	    }
+	}
+	public static long f(int b, int a)
+	{
+	    if(a>b)return 0;
+	    long ans=1L;
+	    while(b!=0)
+	    {
+	        int last_a = (a&1);
+	        int last_b = (b&1);
+	        
+	        a>>=1;
+	        b>>=1;
+	        
+	        if(last_a==0 && last_b==0)continue;
+	        if(last_a==0 && last_b==1)continue;
+	        if(last_a==1 && last_b==0)
+	        {
+	            ans=0;
+	            break;
+	        }
+	        if(last_a==1 && last_b==1)ans=(ans*2)%M;
+	    }
+	    return ans;
+	}
+}
