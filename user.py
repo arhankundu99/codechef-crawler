@@ -11,9 +11,9 @@ def download(problem_code, link):
     final_path = os.path.join(parent_path, file)
 
     if os.path.exists(final_path):
-        print("This file is already downloaded")
+        print("{} is already downloaded".format(problem_code))
         return
-
+    print("Downloading {}....".format(problem_code))
     r = requests.get(link)
     link = BeautifulSoup(r.text, 'html.parser').find('a', string="View")['href']
     view_solution_link = "https://www.codechef.com" + link
@@ -29,6 +29,7 @@ def download(problem_code, link):
     if not os.path.exists(parent_path):
         os.mkdir(parent_path)
     os.rename(file, final_path)
+    print("Downloading Finished")
 
 
 class User:
@@ -50,7 +51,7 @@ class User:
 
             print("Overall Rating: {}\nLong Challenge Rating: {}\nCookoff Rating: {}\nLunch Time Rating: {}"
                   .format(overall_rating, long_rating, cookoff_rating, lunch_rating))
-        except Exception :
+        except Exception:
             print("Something went wrong!")
 
     def get_profile(self):
@@ -65,7 +66,7 @@ class User:
     def get_code(self, problem_code):
         info = self.soup.find('a', text=problem_code)
         if info:
-            link = 'https://www.codechef.com'+info['href']
+            link = 'https://www.codechef.com' + info['href']
             download(problem_code, link)
         else:
             print("User has not solved this problem yet")
@@ -73,3 +74,14 @@ class User:
     def has_solved(self, problem_code):
         content = self.soup.find("section", attrs={'class': 'rating-data-section problems-solved'})
         return content.text.__contains__(problem_code)
+
+    def download_all_codes(self, contest_name=None):
+        if contest_name is None:
+            info = self.soup.find('section', attrs={'class': 'rating-data-section problems-solved'}).findAll('a')
+            try:
+                for i in range(0, len(info)):
+                    link = 'https://www.codechef.com' + info[i]['href']
+                    download(info[i].text, link)
+            except:
+                print(link)
+                print("Error!")
