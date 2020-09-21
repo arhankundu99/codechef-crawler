@@ -18,7 +18,7 @@ You can easily install all requirements by just using the following command- \
 from user import User
 
 # create an object of User class
-User user = User('arhankundu99')
+user = User('arhankundu99')
 ```
 
 ```python
