@@ -59,3 +59,7 @@ crawler.get_schedule()
 crawler.get_editorials(contest_name)
 # Downloads the editorials for all the problems related to the contest in the EDITORIALS folder
 ```
+
+## TO-DO
+1) Add Multithreading for faster downloading of solutions
+2) Add rating comparator for 2 users
